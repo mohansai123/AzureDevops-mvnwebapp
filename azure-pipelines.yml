@@ -1,49 +1,31 @@
-trigger:
-  branches:
-    exclude:
-      - '*'
+# Maven
+# Build your Java project and run tests with Apache Maven.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/java
 
-pr:
-  branches:
-    exclude:
-      - '*'
+trigger:
+- master
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: ubuntu-latest
 
 steps:
-- task: UseDotNet@2
+- task: Maven@3
   inputs:
-    version: '2.x'
-    installationPath: $(Agent.ToolsDirectory)/dotnet
+    mavenPomFile: 'pom.xml'
+    mavenOptions: '-Xmx3072m'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.11'
+    jdkArchitectureOption: 'x64'
+    publishJUnitResults: true
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    goals: 'package'
 
-- task: PowerShell@2
-  displayName: 'Install AWS CLI'
+- task: TomcatDeployment@1
   inputs:
-    targetType: 'inline'
-    script: |
-      Invoke-WebRequest -Uri https://awscli.amazonaws.com/AWSCLIV2.msi -OutFile AWSCLIV2.msi
-      Start-Process msiexec.exe -ArgumentList '/i', 'AWSCLIV2.msi', '/quiet' -Wait
-
-- task: PowerShell@2
-  displayName: 'Configure AWS CLI'
-  inputs:
-    targetType: 'inline'
-    script: |
-      aws configure set aws_access_key_id $(AWS_ACCESS_KEY_ID)
-      aws configure set aws_secret_access_key $(AWS_SECRET_ACCESS_KEY)
-      aws configure set default.region ap-south-1
-
-- task: DownloadPipelineArtifact@2
-  inputs:
-    artifact: 'MyWarArtifact'
-    path: '$(Pipeline.Workspace)'
-    patterns: '**/*.war'
-
-- task: PowerShell@2
-  displayName: 'Copy WAR file to Tomcat webapps directory'
-  inputs:
-    targetType: 'inline'
-    script: |
-      Copy-Item -Path "$(Pipeline.Workspace)\*.war" -Destination "C:\path\to\your\tomcat\webapps\"
-      Restart-Service -Name 'Tomcat'  # Adjust the service name based on your Tomcat setup
+    TomcatUrl: 'http://65.0.31.77:8080'
+    Username: 'pavan'
+    Password: 'Pavan@123'
+    Warfile: 'target/mvnwebapp.war'
+    Context: '/azure-deploy'
+    ServerVersion: '7OrAbove'
