@@ -17,15 +17,15 @@ steps:
     version: '2.x'
     installationPath: $(Agent.ToolsDirectory)/dotnet
 
-- task: AmazonWebServices.aws-toolkit-1.157.0.InstallAWSToolkit
+- task: AWSCodeDeploy@1
   displayName: 'Install AWS Toolkit'
   inputs:
     installOrUpdateAWSToolkit: true
 
-- task: AmazonWebServices.aws-toolkit-1.157.0.ConfigureAWSCLI
+- task: AWSCodeDeploy@1
   displayName: 'Configure AWS CLI'
   inputs:
-    awsRegion: 'ap-south-1'
+    awsRegion: 'us-east-1'
     awsAccessKeyId: $(AWS_ACCESS_KEY_ID)
     awsSecretAccessKey: $(AWS_SECRET_ACCESS_KEY)
 
