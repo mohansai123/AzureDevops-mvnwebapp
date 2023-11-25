@@ -9,6 +9,14 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
+variables:
+  AWS_ACCESS_KEY_ID: $(AWS_ACCESS_KEY_ID)
+  AWS_SECRET_ACCESS_KEY: $(AWS_SECRET_ACCESS_KEY)
+  AWS_DEFAULT_REGION: $(AWS_DEFAULT_REGION)
+  EC2_INSTANCE_IP: $(EC2_INSTANCE_IP)
+  TOMCAT_MANAGER_USER: $(TOMCAT_MANAGER_USER)
+  TOMCAT_MANAGER_PASSWORD: $(TOMCAT_MANAGER_PASSWORD)
+
 steps:
 - task: Maven@3
   inputs:
@@ -23,9 +31,9 @@ steps:
 
 - task: TomcatDeployment@1
   inputs:
-    TomcatUrl: 'http://65.0.31.77:8080'
-    Username: 'pavan'
-    Password: 'Pavan@123'
+    TomcatUrl: 'http://$(EC2_INSTANCE_IP):8080'
+    Username: $(TOMCAT_MANAGER_USER)
+    Password: $(TOMCAT_MANAGER_PASSWORD)
     Warfile: 'target/mvnwebapp.war'
     Context: '/azure-deploy'
     ServerVersion: '7OrAbove'
