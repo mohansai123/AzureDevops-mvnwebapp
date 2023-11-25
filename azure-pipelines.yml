@@ -25,11 +25,14 @@ steps:
       Invoke-WebRequest -Uri https://awscli.amazonaws.com/AWSCLIV2.msi -OutFile AWSCLIV2.msi
       Start-Process msiexec.exe -ArgumentList '/i', 'AWSCLIV2.msi', '/quiet' -Wait
 
-- task: AWSCLI@1
+- task: PowerShell@2
   displayName: 'Configure AWS CLI'
   inputs:
-    awsCommand: 'configure'
-    awsCommandArguments: 'configure set aws_access_key_id $(AWS_ACCESS_KEY_ID) && configure set aws_secret_access_key $(AWS_SECRET_ACCESS_KEY) && configure set default.region us-east-1'
+    targetType: 'inline'
+    script: |
+      aws configure set aws_access_key_id $(AWS_ACCESS_KEY_ID)
+      aws configure set aws_secret_access_key $(AWS_SECRET_ACCESS_KEY)
+      aws configure set default.region ap-south-1
 
 - task: DownloadPipelineArtifact@2
   inputs:
