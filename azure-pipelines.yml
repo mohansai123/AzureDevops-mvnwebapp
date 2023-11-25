@@ -1,13 +1,44 @@
 trigger:
-- master
+  branches:
+    exclude:
+      - '*'
+
+pr:
+  branches:
+    exclude:
+      - '*'
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: 'ubuntu-latest'
 
-jobs:
-- job: Build
-  steps:
-  - task: Maven@3
-    inputs:
-      mavenPomFile: 'pom.xml'
-      goals: 'package'
+steps:
+- task: UseDotNet@2
+  inputs:
+    version: '2.x'
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+
+- task: AmazonWebServices.aws-toolkit-1.157.0.InstallAWSToolkit
+  displayName: 'Install AWS Toolkit'
+  inputs:
+    installOrUpdateAWSToolkit: true
+
+- task: AmazonWebServices.aws-toolkit-1.157.0.ConfigureAWSCLI
+  displayName: 'Configure AWS CLI'
+  inputs:
+    awsRegion: 'ap-south-1'
+    awsAccessKeyId: $(AWS_ACCESS_KEY_ID)
+    awsSecretAccessKey: $(AWS_SECRET_ACCESS_KEY)
+
+- task: DownloadPipelineArtifact@2
+  inputs:
+    artifact: 'MyWarArtifact'
+    path: '$(Pipeline.Workspace)'
+    patterns: '**/*.war'
+
+- task: PowerShell@2
+  displayName: 'Copy WAR file to Tomcat webapps directory'
+  inputs:
+    targetType: 'inline'
+    script: |
+      Copy-Item -Path "$(Pipeline.Workspace)\*.war" -Destination "C:\path\to\your\tomcat\webapps\"
+      Restart-Service -Name 'Tomcat'  # Adjust the service name based on your Tomcat setup
