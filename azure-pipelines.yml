@@ -17,17 +17,19 @@ steps:
     version: '2.x'
     installationPath: $(Agent.ToolsDirectory)/dotnet
 
-- task: AWSCodeDeploy@1
-  displayName: 'Install AWS Toolkit'
+- task: PowerShell@2
+  displayName: 'Install AWS CLI'
   inputs:
-    installOrUpdateAWSToolkit: true
+    targetType: 'inline'
+    script: |
+      Invoke-WebRequest -Uri https://awscli.amazonaws.com/AWSCLIV2.msi -OutFile AWSCLIV2.msi
+      Start-Process msiexec.exe -ArgumentList '/i', 'AWSCLIV2.msi', '/quiet' -Wait
 
-- task: AWSCodeDeploy@1
+- task: AWSCLI@1
   displayName: 'Configure AWS CLI'
   inputs:
-    awsRegion: 'us-east-1'
-    awsAccessKeyId: $(AWS_ACCESS_KEY_ID)
-    awsSecretAccessKey: $(AWS_SECRET_ACCESS_KEY)
+    awsCommand: 'configure'
+    awsCommandArguments: 'configure set aws_access_key_id $(AWS_ACCESS_KEY_ID) && configure set aws_secret_access_key $(AWS_SECRET_ACCESS_KEY) && configure set default.region us-east-1'
 
 - task: DownloadPipelineArtifact@2
   inputs:
