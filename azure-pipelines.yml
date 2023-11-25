@@ -17,23 +17,25 @@ variables:
   TOMCAT_MANAGER_USER: $(TOMCAT_MANAGER_USER)
   TOMCAT_MANAGER_PASSWORD: $(TOMCAT_MANAGER_PASSWORD)
 
-steps:
-- task: Maven@3
-  inputs:
-    mavenPomFile: 'pom.xml'
-    mavenOptions: '-Xmx3072m'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.11'
-    jdkArchitectureOption: 'x64'
-    publishJUnitResults: true
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    goals: 'package'
+jobs:
+- job: DeployToTomcat
+  steps:
+  - task: Maven@3
+    inputs:
+      mavenPomFile: 'pom.xml'
+      mavenOptions: '-Xmx3072m'
+      javaHomeOption: 'JDKVersion'
+      jdkVersionOption: '1.11'
+      jdkArchitectureOption: 'x64'
+      publishJUnitResults: true
+      testResultsFiles: '**/surefire-reports/TEST-*.xml'
+      goals: 'package'
 
-- task: TomcatDeployment@1
-  inputs:
-    TomcatUrl: 'http://$(EC2_INSTANCE_IP):8080'
-    Username: $(TOMCAT_MANAGER_USER)
-    Password: $(TOMCAT_MANAGER_PASSWORD)
-    Warfile: 'target/mvnwebapp.war'
-    Context: '/azure-deploy'
-    ServerVersion: '7OrAbove'
+  - task: TomcatDeployment@1
+    inputs:
+      TomcatUrl: 'http://$(EC2_INSTANCE_IP):8080'
+      Username: $(TOMCAT_MANAGER_USER)
+      Password: $(TOMCAT_MANAGER_PASSWORD)
+      Warfile: 'target/mvnwebapp.war'
+      Context: '/azure-deploy'
+      ServerVersion: '7OrAbove'
