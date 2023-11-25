@@ -23,12 +23,3 @@ jobs:
       publishJUnitResults: true
       testResultsFiles: '**/surefire-reports/TEST-*.xml'
       goals: 'package'
-
-  - task: TomcatDeployment@1
-    inputs:
-      TomcatUrl: 'http://65.1.136.13:8080'
-      Username: 'pavan'
-      Password: 'Pavan@123'
-      Warfile: 'target/mvnwebapp.war'
-      Context: '/azure-deploy'
-      ServerVersion: '7OrAbove'
