@@ -10,17 +10,17 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-  - name: AWS_ACCESS_KEY_ID
+  - name: AWS-ACCESS-KEY-ID
     value: $(AWS_ACCESS_KEY_ID)
-  - name: AWS_SECRET_ACCESS_KEY
+  - name: AWS-SECRET-ACCESS-KEY
     value: $(AWS_SECRET_ACCESS_KEY)
-  - name: AWS_DEFAULT_REGION
+  - name: AWS-DEFAULT-REGION
     value: $(AWS_DEFAULT_REGION)
-  - name: EC2_INSTANCE_IP
+  - name: EC2-INSTANCE-IP
     value: $(EC2_INSTANCE_IP)
-  - name: TOMCAT_MANAGER_USER
+  - name: TOMCAT-MANAGER-USER
     value: $(TOMCAT_MANAGER_USER)
-  - name: TOMCAT_MANAGER_PASSWORD
+  - name: TOMCAT-MANAGER-PASSWORD
     value: $(TOMCAT_MANAGER_PASSWORD)
 jobs:
 - job: DeployToTomcat
