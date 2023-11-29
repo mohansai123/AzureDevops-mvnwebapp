@@ -10,14 +10,12 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-  - name: AWS_DEFAULT_REGION
-    value: ap-south-1
   - name: EC2_INSTANCE_IP
     value: $(EC2_IP)
   - name: TOMCAT_MANAGER_USER
-    value: sonixdev
+    value: $(Tomcat_Username)
   - name: TOMCAT_MANAGER_PASSWORD
-    value: sonix123
+    value: $(Tomcat_Password)
 jobs:
 - job: DeployToTomcat
   steps:
