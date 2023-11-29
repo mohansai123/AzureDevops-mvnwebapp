@@ -17,11 +17,11 @@ variables:
   - name: AWS_DEFAULT_REGION
     value: ap-south-1
   - name: EC2_INSTANCE_IP
-    value: $(EC2_INSTANCE_IP)
+    value: 65.2.31.38
   - name: TOMCAT_MANAGER_USER
-    value: pavan
+    value: sonixdev
   - name: TOMCAT_MANAGER_PASSWORD
-    value: Pavan@123
+    value: sonix123
 jobs:
 - job: DeployToTomcat
   steps:
