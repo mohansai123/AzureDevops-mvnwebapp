@@ -15,13 +15,13 @@ variables:
   - name: AWS_SECRET_ACCESS_KEY
     value: $(AWS_SECRET_ACCESS_KEY)
   - name: AWS_DEFAULT_REGION
-    value: $(AWS_DEFAULT_REGION)
+    value: ap-south-1
   - name: EC2_INSTANCE_IP
-    value: $(EC2_INSTANCE_IP)
+    value: 52.66.209.20
   - name: TOMCAT_MANAGER_USER
-    value: $(TOMCAT_MANAGER_USER)
+    value: pavan
   - name: TOMCAT_MANAGER_PASSWORD
-    value: $(TOMCAT_MANAGER_PASSWORD)
+    value: Pavan@123
 jobs:
 - job: DeployToTomcat
   steps:
