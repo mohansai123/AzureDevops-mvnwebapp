@@ -35,11 +35,13 @@ jobs:
       publishJUnitResults: true
       testResultsFiles: '**/surefire-reports/TEST-*.xml'
       goals: 'package'
-  - task: SSH@0
+  - task: Bash@3
     inputs:
-      runOptions: 'commands'
-      commands: 'echo $(EC2_INSTANCE_IP)'
-      readyTimeout: '20000'
+      targetType: 'inline'
+      script: |
+        # Write your commands here
+            
+        echo $(EC2_INSTANCE_IP)
       
 
   - task: TomcatDeployment@1
