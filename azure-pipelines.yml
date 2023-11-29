@@ -10,14 +10,10 @@ pool:
   vmImage: ubuntu-latest
 
 variables:
-  - name: AWS_ACCESS_KEY_ID
-    value: $(AWS_ACCESS_KEY_ID)
-  - name: AWS_SECRET_ACCESS_KEY
-    value: $(AWS_SECRET_ACCESS_KEY)
   - name: AWS_DEFAULT_REGION
     value: ap-south-1
   - name: EC2_INSTANCE_IP
-    value: 65.2.31.38
+    value: $(EC2_IP)
   - name: TOMCAT_MANAGER_USER
     value: sonixdev
   - name: TOMCAT_MANAGER_PASSWORD
